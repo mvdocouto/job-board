@@ -1,63 +1,30 @@
-import React, { Component } from "react";
+import React from "react";
+import ReactPlaceholder from "react-placeholder";
+import "react-placeholder/lib/reactPlaceholder.css";
+
+import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
-import { getJob } from "../../graphql/requests";
+import { loadJob } from "../../graphql/queries";
 
-export class JobDetail extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {job: null};
-  }
+export const JobDetail = ({ match }) => {
+  const jobId = match.params.jobId;
+  const { data, loading } = useQuery(loadJob, {
+    variables: { id: jobId },
+  });
+  const job = data ? data.job : {};
 
-  async componentDidMount(){
-    const { jobId } = this.props.match.params
-    const job = await getJob(jobId);
-    this.setState({ job })  
-  }
-
-  render() {
-    const {job} = this.state;
-    if(!job){
-      return null;
-    }
+  if (loading) {
+    return <ReactPlaceholder showLoadingAnimation type="media" rows={5} />;
+  } else {
+    const { title, company, description } = job;
     return (
       <div>
-        <h1 className="title">{job.title}</h1>
+        <h1 className="title">{title}</h1>
         <h2 className="subtitle">
-          <Link to={`/companies/${job.company.id}`}>{job.company.name}</Link>
+          <Link to={`/companies/${company.id}`}>{company.name}</Link>
         </h2>
-        <div className="box">{job.description}</div>
+        <div className="box">{description}</div>
       </div>
     );
   }
-}
-
-
-// TODO Refactor to function
-
-// const fetchJob  = async (jobId) => {
-//   const response = await getJob(jobId);
-//   return response;
-// }
-
-// export const JobDetail = () => {
-//   const { jobId } = useParams();
-//   const [job, setJob] = useState(null);
-  
-//   useEffect(async () => {
-//     const data = await getJob(jobId);
-//     setJob(data);
-//   }, [setJob, jobId]);
-
-//   if (!job) {
-//     return null;
-//   }
-//   return (
-//     <div>
-//       <h1 className="title">{job.title}</h1>
-//       <h2 className="subtitle">
-//         <Link to={`/companies/${job.company.id}`}>{job.company.name}</Link>
-//       </h2>
-//       <div className="box">{job.description}</div>
-//     </div>
-//   ); 
-// }
+};
