@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery} from '@apollo/react-hooks'
 import { JobList } from './List';
-import { loadJobs } from '../../requests';
+import { listJobs } from "../../graphql/queries";
 
  export const JobBoard = () => {
+  
   const [jobs, setJobs] = useState([])
-
-  useEffect(() => {
-    async function fetchData() {
-      const jobs = await loadJobs();          
-      setJobs(jobs);
+  useQuery(listJobs, {
+    onCompleted: (data) => {
+      setJobs(data.jobs)
     }
-    fetchData();
-  }, [setJobs]);
+  });
 
   return (
       <div>
