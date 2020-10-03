@@ -1,6 +1,6 @@
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from 'apollo-boost'
 
-import { isLoggedIn, getAccessToken } from "./auth";
+import { isLoggedIn, getAccessToken } from "../auth";
 import { addJob, listJobs, loadJob, loadCompany } from "./queries";
 
 const SERVER_URL = 'http://localhost:9000/graphql'
@@ -17,7 +17,7 @@ const authlink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   link: ApolloLink.from([
     authlink,
     new HttpLink({ uri: SERVER_URL })
