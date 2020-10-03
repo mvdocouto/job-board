@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { isLoggedIn, logout } from './auth';
-import { CompanyDetail } from './CompanyDetail';
-import { LoginForm } from './LoginForm';
-import { JobBoard } from './JobBoard';
-import { JobDetail } from './JobDetail';
-import { JobForm } from './JobForm';
+import { CompanyDetail } from './components/company/Detail';
+import { LoginForm } from './components/login/Form';
+import { JobBoard } from './components/job/Board';
+import { JobDetail } from './components/job/Detail';
+import { JobForm } from './components/job/Form';
 import { NavBar } from './NavBar';
 
 export class App extends Component {

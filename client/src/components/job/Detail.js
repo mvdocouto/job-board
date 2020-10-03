@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { getJob } from "./requests";
+import { getJob } from "../../requests";
 
 export class JobDetail extends Component {
   constructor(props) {

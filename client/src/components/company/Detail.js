@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { JobList} from "./JobList"
-import { getCompay } from "./requests";
+import { JobList} from "../job/List"
+import { getCompay } from "../../requests";
 
 export class CompanyDetail extends Component {
   constructor(props) {
