@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { JobList} from "../job/List"
-import { getCompay } from "../../requests";
+import { JobList} from "../Job/List"
+import { getCompay } from "../../graphql/requests";
 
 export class CompanyDetail extends Component {
   constructor(props) {
