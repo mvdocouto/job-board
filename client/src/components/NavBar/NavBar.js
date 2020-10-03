@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import { Link } from 'react-router-dom';
 
-export class NavBar extends Component {
-  render() {
-    const { loggedIn, onLogout } = this.props;
-    if (loggedIn) {
+export const NavBar = ({ loggedIn, onLogout }) => {
+  if (loggedIn) {
       return (
         <nav className="navbar">
           <div className="navbar-start">
@@ -25,5 +23,5 @@ export class NavBar extends Component {
         </nav>
       );
     }
-  }
 }
+
