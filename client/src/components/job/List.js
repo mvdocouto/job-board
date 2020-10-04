@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-export class JobList extends Component {
-  render() {
-    const {jobs} = this.props;
-    return (
-      <ul className="box">
-        {jobs.map(this.renderJob.bind(this))}
-      </ul>
-    );
-  }
+const Job = ({ job }) => {
+  const { company, title, id } = job;
+  const text = company ? `${title} at ${company.name}` : title;
 
-  renderJob(job) {
-    const title = job.company ? `${job.title} at ${job.company.name}` : job.title;
-    return (
-      <li className="media" key={job.id}>
-        <div className="media-content">
-          <Link to={`/jobs/${job.id}`}>{title}</Link>
-        </div>
-      </li>
-    );
-  }
-}
+  return (
+    <li className="media" key={id}>
+      <div className="media-content">
+        <Link to={`/jobs/${id}`}>{text}</Link>
+      </div>
+    </li>
+  );
+};
+
+export const JobList = ({ jobs }) => (
+  <ul className="box">
+    {jobs.map((job, index) => (
+      <Job key={index} job={job} />
+    ))}
+  </ul>
+);

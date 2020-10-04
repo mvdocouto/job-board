@@ -1,31 +1,27 @@
-import React, { Component } from 'react';
-import { JobList} from "../Job/List"
-import { getCompay } from "../../graphql/requests";
+import React from "react";
+import { useQuery } from "@apollo/react-hooks";
 
-export class CompanyDetail extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {company: null};
-  }
+import { JobList } from "../Job/List";
+import { loadCompany } from "../../graphql/queries";
 
-  async componentDidMount(){
-    const { companyId } = this.props.match.params
-    const company = await getCompay(companyId);
-    this.setState({ company });
-  }
+export const CompanyDetail = ({ match }) => {
+  const companyId = match.params.companyId;
+  const { data, loading } = useQuery(loadCompany, {
+    variables: { id: companyId },
+  });
+  const company = data ? data.company : {};
 
-  render() {
-    const {company} = this.state;
-    if(!company) {
-      return null;
-    }
+  if (loading) {
+    return null;
+  } else {
+    const { name, description, jobs } = company;
     return (
       <div>
-        <h1 className="title">{company.name}</h1>
-        <div className="box">{company.description}</div>
-        <h5 className="title is-5"> Jobs at {company.name}</h5>
-        <JobList jobs={company.jobs} />
+        <h1 className="title">{name}</h1>
+        <div className="box">{description}</div>
+        <h5 className="title is-5"> Jobs at {name}</h5>
+        <JobList jobs={jobs} />
       </div>
     );
   }
-}
+};
