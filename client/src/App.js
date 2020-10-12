@@ -1,5 +1,12 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { useState } from 'react';
+import styled  from "styled-components";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
+
 import { ApolloProvider } from "@apollo/react-hooks";
 
 import { isLoggedIn, logout } from './auth';
@@ -11,56 +18,53 @@ import { JobDetail } from './components/Job/Detail';
 import { JobForm } from './components/Job/Form';
 import { NavBar } from './components/NavBar/NavBar';
 
-export class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {loggedIn: isLoggedIn()};
+
+const WrapperContainer = styled.div`
+  width: 900px;
+  margin: 0 auto;
+`
+
+
+export const App = () => {
+  const history = useHistory();
+  const [userLogin, setUserLogin] = useState({ loggedIn: isLoggedIn() });
+  const handleLogin = () => {
+    setUserLogin({ loggedIn: true });
+    console.log(history);
+    // history.push('/');
   }
 
-  handleLogin() {
-    this.setState({loggedIn: true});
-    this.router.history.push('/');
-  }
-
-  handleLogout() {
+  const handleLogout = () => {
     logout();
-    this.setState({loggedIn: false});
-    this.router.history.push('/');
-  }
+    setUserLogin({ loggedIn: false });
+    // history.push("/");
+    console.log(history);
+  };
 
-  render() {
-    const {loggedIn} = this.state;
-    return (
-      <ApolloProvider client={client}>
-        <Router ref={(router) => (this.router = router)}>
-          <div>
-            <NavBar
-              loggedIn={loggedIn}
-              onLogout={this.handleLogout.bind(this)}
-            />
-            <section className="section">
-              <div className="container">
-                <Switch>
-                  <Route exact path="/" component={JobBoard} />
-                  <Route
-                    path="/companies/:companyId"
-                    component={CompanyDetail}
-                  />
-                  <Route exact path="/jobs/new" component={JobForm} />
-                  <Route path="/jobs/:jobId" component={JobDetail} />
-                  <Route
-                    exact
-                    path="/login"
-                    render={() => (
-                      <LoginForm onLogin={this.handleLogin.bind(this)} />
-                    )}
-                  />
-                </Switch>
-              </div>
-            </section>
-          </div>
-        </Router>
-      </ApolloProvider>
-    );
-  }
+  const { loggedIn } = userLogin;
+  
+  return (
+    <ApolloProvider client={client}>
+      <Router>
+        <WrapperContainer>
+          <NavBar loggedIn={loggedIn} onLogout={handleLogout} />
+          <section className="section">
+            <div className="container">
+              <Switch>
+                <Route exact path="/" component={JobBoard} />
+                <Route path="/companies/:companyId" component={CompanyDetail} />
+                <Route exact path="/jobs/new" component={JobForm} />
+                <Route path="/jobs/:jobId" component={JobDetail} />
+                <Route
+                  exact
+                  path="/login"
+                  render={() => <LoginForm onLogin={handleLogin} />}
+                />
+              </Switch>
+            </div>
+          </section>
+        </WrapperContainer>
+      </Router>
+    </ApolloProvider>
+  );
 }
